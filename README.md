@@ -3,6 +3,8 @@
 
 # BayesPC
 
+R package for Bayesian Projection Clustering.
+
 <!-- badges: start -->
 
 <!-- badges: end -->

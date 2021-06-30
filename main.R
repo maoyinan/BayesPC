@@ -30,7 +30,7 @@ test()
 use_package("forcats")
 use_r("fcount")
 load_all()
-fcount(iris$Species)
+# fcount(iris$Species)
 
 document()
 use_readme_rmd()
