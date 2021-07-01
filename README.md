@@ -3,8 +3,6 @@
 
 # BayesPC
 
-R package for Bayesian Projection Clustering.
-
 <!-- badges: start -->
 
 <!-- badges: end -->
@@ -16,11 +14,9 @@ The goal of BayesPC is to …
 You can install the released version of BayesPC from
 [CRAN](https://CRAN.R-project.org) with:
 
-<!-- ``` r -->
-
-<!-- install.packages("BayesPC") -->
-
-<!-- ``` -->
+``` r
+install.packages("BayesPC")
+```
 
 And the development version from [GitHub](https://github.com/) with:
 
@@ -33,13 +29,10 @@ devtools::install_github("maoyinan/BayesPC")
 
 This is a basic example which shows you how to solve a common problem:
 
-<!-- ```{r example} -->
-
-<!-- library(BayesPC) -->
-
-<!-- ## basic example code -->
-
-<!-- ``` -->
+``` r
+library(BayesPC)
+## basic example code
+```
 
 What is special about using `README.Rmd` instead of just `README.md`?
 You can include R chunks like so:
