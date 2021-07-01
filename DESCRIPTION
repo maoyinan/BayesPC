@@ -1,13 +1,21 @@
 Package: BayesPC
-Title: What the Package Does (One Line, Title Case)
+Title: R package for Bayesian Projection Clustering
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Yinan",
+           family = "Mao",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           email = "ephmy@nus.edu.sg",
+           comment = c(ORCID = "0000-0002-1293-4826"))
+Description: 
+    Implement functions in support of manuscript 
+    "Bayesian clustering using random effects models and predictive projections". 
+    The main goal of the algorithm is to cluster longitudinal data (not necessarily
+    equally sampled) into several clusters based on chosen random 
+    effects in a Bayesian linear mixed model setting. Cluster number optimisation 
+    is integrated, but manual selection is allowed. A few benchmark methods are 
+    supplied to compare with BayesPC. Example of crop image data is built in to 
+    demonstrate the algorithm.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
