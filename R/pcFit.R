@@ -45,33 +45,31 @@ pcFit <- function(id_var, ls_par, dat, ls_idxA) {
     idxB <- setdiff(ls_idxA[[1]], idxA)
 
     bAMatrix <- bMatrix[, idxA]
-    y <- my.fit(idxA, idxB, dat,G,bAMatrix,b0,  id)
+    y <- my.fit(idxA, idxB, dat, G, bAMatrix, b0, id)
     list(y)
   } -> temp
   mat_fitted <- matrix(unlist(lapply(temp, "[[", 1)), ncol = length(ls_idxA), byrow = F, dimnames = list(c(), sprintf("y_hatA%d", seq(length(ls_idxA)))))
 }
 
 
-my.fit <- function(idxA, idxB, dat,G,bAMatrix,b0,  id){
-  nSub= length(unique(id))
-  GA <- G[idxA,idxA]
+my.fit <- function(idxA, idxB, dat, G, bAMatrix, b0, id) {
+  nSub <- length(unique(id))
+  GA <- G[idxA, idxA]
   GA1 <- solve(GA)
-  if(length(idxB)>0){
-    GAB <- G[idxA,idxB]
-    ZB <- as.matrix(dat[,paste0('Z',idxB)])
-    term <- t(GAB)%*%GA1
+  if (length(idxB) > 0) {
+    GAB <- G[idxA, idxB]
+    ZB <- as.matrix(dat[, paste0("Z", idxB)])
+    term <- t(GAB) %*% GA1
   }
-  ZA <- as.matrix(dat[,paste0('Z',idxA)])
+  ZA <- as.matrix(dat[, paste0("Z", idxA)])
 
   y <- numeric(length(id))
-  for(i in seq(length(y))){
-    if(length(idxB)>0){
-      y[i] <- b0+as.numeric((ZA[i,] + ZB[i,]%*%term) %*% bAMatrix[id[i],])
+  for (i in seq(length(y))) {
+    if (length(idxB) > 0) {
+      y[i] <- b0 + as.numeric((ZA[i, ] + ZB[i, ] %*% term) %*% bAMatrix[id[i], ])
+    } else {
+      y[i] <- b0 + as.numeric((ZA[i, ]) %*% bAMatrix[id[i], ])
     }
-    else
-      y[i] <- b0+as.numeric((ZA[i,]) %*% bAMatrix[id[i],])
-
   }
   y
 }
-
