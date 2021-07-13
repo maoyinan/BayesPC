@@ -14,24 +14,19 @@
 #' @export
 #' @examples
 #' data(DATASET)
-#' df_of_draws <- modelStan('Record',paste0('Z',1:10), 'ID',DATASET, iter=2, chain=1)
-modelStan <- function(y_var,x_var,id_var,dat,...){
+#' df_of_draws <- modelStan("Record", paste0("Z", 1:10), "ID", DATASET, iter = 2, chain = 1)
+modelStan <- function(y_var, x_var, id_var, dat, ...) {
   dat_mcmc <- list(
-    N= nrow(dat),
-    y= dat[,y_var],
-    nBasis= length(x_var),
-    Z= dat[,x_var],
-    nSub= length(unique(dat[,id_var])),
-    sub= as.numeric(dat[,id_var])
+    N = nrow(dat),
+    y = dat[, y_var],
+    nBasis = length(x_var),
+    Z = dat[, x_var],
+    nSub = length(unique(dat[, id_var])),
+    sub = as.numeric(dat[, id_var])
   )
-  rt <- stanc(file=system.file('extdata','mcmc_try2.stan', package = 'BayesPC'))
-  sm <- stan_model(stanc_ret = rt, verbose=FALSE)
-  system.time(fit02 <- sampling(sm, data=dat_mcmc, seed=1,cores=1, init = 0,...))
+  rt <- stanc(file = system.file("extdata", "mcmc_try2.stan", package = "BayesPC"))
+  sm <- stan_model(stanc_ret = rt, verbose = FALSE)
+  system.time(fit02 <- sampling(sm, data = dat_mcmc, seed = 1, cores = 1, init = 0, ...))
   df_of_draws <- as.data.frame(fit02)
   df_of_draws
 }
-
-
-
-
-
