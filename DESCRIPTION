@@ -7,8 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "ephmy@nus.edu.sg",
            comment = c(ORCID = "0000-0002-1293-4826"))
-Description: 
-    Implement functions in support of manuscript 
+Description: Implement functions in support of manuscript 
     "Bayesian clustering using random effects models and predictive projections". 
     The main goal of the algorithm is to cluster longitudinal data (not necessarily
     equally sampled) into several clusters based on chosen random 
@@ -22,7 +21,20 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Suggests: 
+    knitr,
+    rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Imports: 
-    forcats
+    tidyverse,
+    grid,
+    rstan,
+    rstanarm,
+    parallel,
+    rstudioapi,
+    kableExtra,
+    foreach,
+    doParallel
+VignetteBuilder: knitr
+Depends: 
+    R (>= 2.10)

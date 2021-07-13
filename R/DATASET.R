@@ -1,0 +1,15 @@
+#' Synthetic data example
+#'
+#' A longitudinal data set  to demonstrate use of package containing ID, true group, time points, 10 random effects, and time dependent records
+#'
+#' @format A data frame with 4800 rows and 15 variables:
+#' \describe{
+#'   \item{ID}{Identity number of time series}
+#'   \item{Group}{Group number}
+#'   \item{Time}{Time points}
+#'   \item{t}{Scaled time points ranging between 0 and 1}
+#'   \item{Record}{Observations along time points}
+#'   \item{Z1}{First random effect, intercept term}
+#'   \item{Z2,Z3,Z4,Z5,Z6,Z7,Z8,Z9,Z10}{Random effects of Fourier cosine basis of order 1: \eqn{Z_i=cos(pi*(i-1)*t)}}
+#' }
+"DATASET"
