@@ -25,7 +25,7 @@ To fit longitudinal dataset using linear mixed model by calling stan package.
 }
 \examples{
 data(DATASET)
-df_of_draws <- modelStan('Record',paste0('Z',1:10), 'ID',DATASET, iter=2, chain=1)
+df_of_draws <- modelStan("Record", paste0("Z", 1:10), "ID", DATASET, iter = 2, chain = 1)
 }
 \seealso{
 Other BayesPC main functions: 

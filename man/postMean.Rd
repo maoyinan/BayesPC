@@ -25,9 +25,9 @@ Compute posterior mean based on \link{modelStan} output.
 data(DATASET)
 data(df_of_draws)
 \dontrun{
-df_of_draws <- modelStan('Record',paste0('Z',1:10), 'ID',DATASET)
+df_of_draws <- modelStan("Record", paste0("Z", 1:10), "ID", DATASET)
 }
-ls_par <- postMean(df_of_draws,paste0('Z',1:10), 'ID', DATASET)
+ls_par <- postMean(df_of_draws, paste0("Z", 1:10), "ID", DATASET)
 }
 \seealso{
 Other BayesPC main functions: 
