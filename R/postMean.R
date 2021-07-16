@@ -1,15 +1,14 @@
-#' Calculate posterior mean from the MCMC result
+#' Calculate posterior mean from the Linear Mixed Model result
 #'
-#' Compute posterior mean based on \link{modelStan} output.
-#' @param df_of_draws data frame of simulated LMM output
+#' Compute parameters' posterior mean based on \link{modelStan} output.
+#' @param df_of_draws Data frame of simulated LMM output
 #' @inheritParams modelStan
 #' @return list(b0,bMatrix,G,Gamma)
+#'
 #' @family BayesPC main functions
 #' @export
 #'
 #' @examples
-#' data(DATASET)
-#' data(df_of_draws)
 #' \dontrun{
 #' df_of_draws <- modelStan("Record", paste0("Z", 1:10), "ID", DATASET)
 #' }

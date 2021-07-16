@@ -15,8 +15,6 @@
 #' @export
 #'
 #' @examples
-#' data(DATASET)
-#' data(df_of_draws)
 #' \dontrun{
 #' df_of_draws <- modelStan("Record", paste0("Z", 1:10), "ID", DATASET)
 #' }
@@ -51,7 +49,7 @@ pcFit <- function(id_var, ls_par, dat, ls_idxA) {
   mat_fitted <- matrix(unlist(lapply(temp, "[[", 1)), ncol = length(ls_idxA), byrow = F, dimnames = list(c(), sprintf("y_hatA%d", seq(length(ls_idxA)))))
 }
 
-
+# helper function
 my.fit <- function(idxA, idxB, dat, G, bAMatrix, b0, id) {
   nSub <- length(unique(id))
   GA <- G[idxA, idxA]

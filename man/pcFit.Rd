@@ -7,11 +7,11 @@
 pcFit(id_var, ls_par, dat, ls_idxA)
 }
 \arguments{
-\item{id_var}{character of id variable}
+\item{id_var}{Character of id variable}
 
 \item{ls_par}{Posterior mean of LMM parameters generated from \link{postMean} output}
 
-\item{dat}{dataset to model with stan}
+\item{dat}{Longitudinal data input}
 
 \item{ls_idxA}{List of random effect indices to project on}
 }
@@ -25,8 +25,6 @@ Compute LMM fitted values based on posterior mean output of parameters,
 with chosen random effects to project on.
 }
 \examples{
-data(DATASET)
-data(df_of_draws)
 \dontrun{
 df_of_draws <- modelStan("Record", paste0("Z", 1:10), "ID", DATASET)
 }
@@ -41,6 +39,7 @@ mat_fitted <- pcFit("ID", ls_par, DATASET, ls_idxA)
 }
 \seealso{
 Other BayesPC main functions: 
+\code{\link{clustKL}()},
 \code{\link{modelStan}()},
 \code{\link{postMean}()}
 }

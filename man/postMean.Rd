@@ -2,28 +2,26 @@
 % Please edit documentation in R/postMean.R
 \name{postMean}
 \alias{postMean}
-\title{Calculate posterior mean from the MCMC result}
+\title{Calculate posterior mean from the Linear Mixed Model result}
 \usage{
 postMean(df_of_draws, x_var, id_var, dat)
 }
 \arguments{
-\item{df_of_draws}{data frame of simulated LMM output}
+\item{df_of_draws}{Data frame of simulated LMM output}
 
-\item{x_var}{character vector of random effect variables}
+\item{x_var}{Character vector of random effect variables}
 
-\item{id_var}{character of id variable}
+\item{id_var}{Character of id variable}
 
-\item{dat}{dataset to model with stan}
+\item{dat}{Longitudinal data input}
 }
 \value{
 list(b0,bMatrix,G,Gamma)
 }
 \description{
-Compute posterior mean based on \link{modelStan} output.
+Compute parameters' posterior mean based on \link{modelStan} output.
 }
 \examples{
-data(DATASET)
-data(df_of_draws)
 \dontrun{
 df_of_draws <- modelStan("Record", paste0("Z", 1:10), "ID", DATASET)
 }
@@ -31,6 +29,7 @@ ls_par <- postMean(df_of_draws, paste0("Z", 1:10), "ID", DATASET)
 }
 \seealso{
 Other BayesPC main functions: 
+\code{\link{clustKL}()},
 \code{\link{modelStan}()},
 \code{\link{pcFit}()}
 }

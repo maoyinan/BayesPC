@@ -4,16 +4,18 @@
 \alias{modelStan}
 \title{Bayesian mixed linear regression modelling}
 \usage{
-modelStan(y_var, x_var, id_var, dat, ...)
+modelStan(y_var, x_var, id_var, dat, seed, ...)
 }
 \arguments{
-\item{y_var}{character of response variable}
+\item{y_var}{Character of response variable}
 
-\item{x_var}{character vector of random effect variables}
+\item{x_var}{Character vector of random effect variables}
 
-\item{id_var}{character of id variable}
+\item{id_var}{Character of id variable}
 
-\item{dat}{dataset to model with stan}
+\item{dat}{Longitudinal data input}
+
+\item{seed}{Random seed to pass to \link[rstan]{sampling}}
 
 \item{...}{Additional arguments passed to \link[rstan]{sampling}}
 }
@@ -24,11 +26,11 @@ dataframe of posterior output from Bayesian mixed linear regression
 To fit longitudinal dataset using linear mixed model by calling stan package.
 }
 \examples{
-data(DATASET)
-df_of_draws <- modelStan("Record", paste0("Z", 1:10), "ID", DATASET, iter = 2, chain = 1)
+df_of_draws <- modelStan("Record", paste0("Z", 1:10), "ID", DATASET, seed=1, iter = 2, chain = 1)
 }
 \seealso{
 Other BayesPC main functions: 
+\code{\link{clustKL}()},
 \code{\link{pcFit}()},
 \code{\link{postMean}()}
 }
