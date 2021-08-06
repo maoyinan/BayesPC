@@ -36,24 +36,31 @@
 #' @export
 #'
 #' @examples
-#' benchClust(DATASET,'ID','t','Record','Group',out_pc$arr_cluster)
-#'
-benchClust <- function(dat,id_var, t_var, y_var, g_var, arr_cluster, seed=1){
-  if(is.data.frame(dat)) ls_dat <- list(dat)
-  else ls_dat <- dat
+#' benchClust(DATASET, "ID", "t", "Record", "Group", out_pc$arr_cluster)
+benchClust <- function(dat, id_var, t_var, y_var, g_var, arr_cluster, seed = 1) {
+  if (is.data.frame(dat)) {
+    ls_dat <- list(dat)
+  } else {
+    ls_dat <- dat
+  }
   ls_tb <- list()
 
   i <- 0
-  for(i in seq_along(ls_dat)){
+  for (i in seq_along(ls_dat)) {
     dat <- ls_dat[[i]]
 
     dat1 <- dat %>%
       select(all_of(c(id_var, t_var, y_var))) %>%
-      pivot_wider(names_from = id_var, values_from= y_var) %>%
+      pivot_wider(names_from = id_var, values_from = y_var) %>%
       select(-!!t_var) %>%
-      as.data.frame
-    dat %>% select(all_of(c(g_var, id_var))) %>% unique %>%
-      select(!!g_var) %>% unlist %>% as.factor %>% as.numeric -> true_cluster
+      as.data.frame()
+    dat %>%
+      select(all_of(c(g_var, id_var))) %>%
+      unique() %>%
+      select(!!g_var) %>%
+      unlist() %>%
+      as.factor() %>%
+      as.numeric() -> true_cluster
     dat2 <- t(dat1)
 
     nCluster <- length(unique(true_cluster))
@@ -67,52 +74,58 @@ benchClust <- function(dat,id_var, t_var, y_var, g_var, arr_cluster, seed=1){
     # fn <- "cld1.RData"
     # if (file.exists(fn))  file.remove(fn)
 
-    cat('\nHC_dist\n')
-    IP.dis <- diss(dat1, "INT.PER")#"DWT"
+    cat("\nHC_dist\n")
+    IP.dis <- diss(dat1, "INT.PER") # "DWT"
     IP.hclus <- cutree(hclust(IP.dis), k = nCluster)
 
-    cat('\nHC_pred\n')
+    cat("\nHC_pred\n")
     diffs <- rep(1, ncol(dat1))
     logs <- rep(F, ncol(dat1))
     hc.hclus <- NA
-    hc.hclus <- tryCatch({
-      dpred <- diss(dat1, "PRED", h = nCluster, B = 1200, logarithms = logs, differences = diffs)
-      cutree( hclust(dpred$dist), k = nCluster)
-    },
-    error=function(cond){
-      message('No values returned')
-      message(cond)
-    })
+    hc.hclus <- tryCatch(
+      {
+        dpred <- diss(dat1, "PRED", h = nCluster, B = 1200, logarithms = logs, differences = diffs)
+        cutree(hclust(dpred$dist), k = nCluster)
+      },
+      error = function(cond) {
+        message("No values returned")
+        message(cond)
+      }
+    )
 
-    cat('\nBHC\n')
-    if(length(unique(c(dat2)))>10){
+    cat("\nBHC\n")
+    if (length(unique(c(dat2))) > 10) {
       hc2 <- bhc(dat2, rownames(dat2), 0, seq(ncol(dat2)), "time-course",
-                 numReps=1, noiseMode=0, numThreads=1, verbose=TRUE) # account for correlation in time series (must be continuous): squared exponential covariance
+        numReps = 1, noiseMode = 0, numThreads = 1, verbose = TRUE
+      ) # account for correlation in time series (must be continuous): squared exponential covariance
+    } else {
+      hc2 <- bhc(dat2, rownames(dat2), 0, seq(ncol(dat2)), "multinomial", # used for discrete with 2+ categories data
+        numReps = 1, noiseMode = 0, numThreads = 1, verbose = TRUE
+      )
     }
-    else hc2 <- bhc(dat2, rownames(dat2), 0, seq(ncol(dat2)), "multinomial", # used for discrete with 2+ categories data
-                    numReps=1, noiseMode=0, numThreads=1, verbose=TRUE)
-    bhc.hc <- cutree(as.hclust(hc2), k=nCluster)
+    bhc.hc <- cutree(as.hclust(hc2), k = nCluster)
 
-    cat('\nMclust\n')
+    cat("\nMclust\n")
     BIC <- mclustBIC(dat2)
     mod1 <- Mclust(dat2, x = BIC, G = nCluster) # chosen cluster number always the minimum of G range
     mclust.c <- mod1$classification
 
     # listing benchmarking results
-    ls_benchmark <- list(IP.hclus=IP.hclus, hc.hclus=hc.hclus, bhc.hc=bhc.hc, mclust.c=mclust.c)
+    ls_benchmark <- list(IP.hclus = IP.hclus, hc.hclus = hc.hclus, bhc.hc = bhc.hc, mclust.c = mclust.c)
 
-    rd_ben <- sapply(list(rand.index,adj.rand.index), function(rand.fcn){
+    rd_ben <- sapply(list(rand.index, adj.rand.index), function(rand.fcn) {
       benchmark.rand(true_cluster, ls_benchmark, rand.fcn)
     })
 
-    cat('\nPC\n')
-    rd_pc <- sapply(list(rand.index,adj.rand.index), function(rand.fcn){
+    cat("\nPC\n")
+    rd_pc <- sapply(list(rand.index, adj.rand.index), function(rand.fcn) {
       pc.rand(true_cluster, arr_cluster, rand.fcn)
     })
 
-    tb_rand <- array(rbind(rd_ben,rd_pc), dim = c(8, 2), dimnames = list(
-      c('HC_dist', 'HC_pred', 'BHC', 'Mclust',paste0('PC', seq(4))),
-      c('rand','adj_rand')))
+    tb_rand <- array(rbind(rd_ben, rd_pc), dim = c(8, 2), dimnames = list(
+      c("HC_dist", "HC_pred", "BHC", "Mclust", paste0("PC", seq(4))),
+      c("rand", "adj_rand")
+    ))
     ls_tb[[i]] <- tb_rand
   }
 
@@ -120,16 +133,16 @@ benchClust <- function(dat,id_var, t_var, y_var, g_var, arr_cluster, seed=1){
 }
 
 
-benchmark.rand <- function(true_cluster, ls_benchmark, rand.fcn){
-  ret <- rep(NA,length(ls_benchmark))
-  for(i in seq_along(ls_benchmark)){
-    if(!is.null(ls_benchmark[[i]])&length(ls_benchmark[[i]])) ret[i] <- rand.fcn(true_cluster,ls_benchmark[[i]])
+benchmark.rand <- function(true_cluster, ls_benchmark, rand.fcn) {
+  ret <- rep(NA, length(ls_benchmark))
+  for (i in seq_along(ls_benchmark)) {
+    if (!is.null(ls_benchmark[[i]]) & length(ls_benchmark[[i]])) ret[i] <- rand.fcn(true_cluster, ls_benchmark[[i]])
   }
   ret
 }
 
-pc.rand <- function(true_cluster, arr_cluster, rand.fcn){
-  apply(arr_cluster, 2, function(y)  {
+pc.rand <- function(true_cluster, arr_cluster, rand.fcn) {
+  apply(arr_cluster, 2, function(y) {
     ret <- rand.fcn(true_cluster, y)
     ret
   })

@@ -29,7 +29,7 @@
 #'   8:10
 #' )
 #' out_KL <- clustKL("ID", ls_par, DATASET, ls_idxA, 10, .1, 1e-6, 1)
-clustKL <- function(id_var, ls_par, dat, ls_idxA, nIter, thKL, regQ, seed){
+clustKL <- function(id_var, ls_par, dat, ls_idxA, nIter, thKL, regQ, seed) {
   id <- as.numeric(dat[, id_var])
   nSub <- length(unique(id))
 
@@ -37,49 +37,47 @@ clustKL <- function(id_var, ls_par, dat, ls_idxA, nIter, thKL, regQ, seed){
   G <- ls_par$G
   Gamma <- ls_par$Gamma
 
-  foreach(t = seq(1,length(ls_idxA))) %dopar% {
+  foreach(t = seq(1, length(ls_idxA))) %dopar% {
     idxA <- ls_idxA[[t]]
-    idxB <- setdiff(ls_idxA[[1]],idxA)
+    idxB <- setdiff(ls_idxA[[1]], idxA)
 
-    cat(sprintf('\nSet %d: optimizing cluster number by KL',t))
+    cat(sprintf("\nSet %d: optimizing cluster number by KL", t))
 
-    bAMatrix <- bMatrix[,idxA]
-    Q <- Q.func(idxA, idxB, dat,Gamma, G,id)
-    Kcluster.obj <- KL.pick(nIter, bAMatrix,Q, regQ, do.plot=F, seed=seed)
-    threshold <- Kcluster.obj$KL[1]*thKL
-    nClusters_t <- which(Kcluster.obj$KL<threshold)[1]
+    bAMatrix <- bMatrix[, idxA]
+    Q <- Q.func(idxA, idxB, dat, Gamma, G, id)
+    Kcluster.obj <- KL.pick(nIter, bAMatrix, Q, regQ, do.plot = F, seed = seed)
+    threshold <- Kcluster.obj$KL[1] * thKL
+    nClusters_t <- which(Kcluster.obj$KL < threshold)[1]
     KLs_t <- Kcluster.obj$KL
     cluster_t <- Kcluster.obj$clusterMatrix
 
     list(nClusters_t, KLs_t, cluster_t)
-  }->temp
+  } -> temp
 
   list(
-    nClusters=unlist(lapply(temp,'[[',1)),
-    KLs=lapply(temp,'[[',2),
-    cluster0=lapply(temp,'[[',3)
+    nClusters = unlist(lapply(temp, "[[", 1)),
+    KLs = lapply(temp, "[[", 2),
+    cluster0 = lapply(temp, "[[", 3)
   )
 }
 
-KL.pick <- function(nIter, bAMatrix,Q,regQ, do.plot, seed){
+KL.pick <- function(nIter, bAMatrix, Q, regQ, do.plot, seed) {
   nSub <- nrow(bAMatrix)
   KL <- numeric(nSub)
   nCluster <- 1
-  clusterVec <- rep(1,nSub)
-  dK <- dK.func0(nCluster, clusterVec, Q, bAMatrix,regQ)
-  KL[1] <- KLK.func(dK,clusterVec,bAMatrix,Q)
+  clusterVec <- rep(1, nSub)
+  dK <- dK.func0(nCluster, clusterVec, Q, bAMatrix, regQ)
+  KL[1] <- KLK.func(dK, clusterVec, bAMatrix, Q)
 
-  clusterMatrix <- matrix(NA, nrow= nSub, ncol= nSub)
-  clusterMatrix[,1] <- clusterVec
+  clusterMatrix <- matrix(NA, nrow = nSub, ncol = nSub)
+  clusterMatrix[, 1] <- clusterVec
 
-  for(nCluster in seq(2,nSub-1)){
-    temp <- cluster.iter(clusterVec,nIter,nCluster,Q,bAMatrix,regQ, seed,do.plot)
-    dK <- temp[[2]][,,nIter]
-    clusterVec <- temp[[1]][,nIter]
-    KL[nCluster] <- KLK.func(dK,clusterVec,bAMatrix,Q)
-    clusterMatrix[,nCluster] <- clusterVec
-
+  for (nCluster in seq(2, nSub - 1)) {
+    temp <- cluster.iter(clusterVec, nIter, nCluster, Q, bAMatrix, regQ, seed, do.plot)
+    dK <- temp[[2]][, , nIter]
+    clusterVec <- temp[[1]][, nIter]
+    KL[nCluster] <- KLK.func(dK, clusterVec, bAMatrix, Q)
+    clusterMatrix[, nCluster] <- clusterVec
   }
-  list(KL=KL, clusterMatrix=clusterMatrix)
+  list(KL = KL, clusterMatrix = clusterMatrix)
 }
-
