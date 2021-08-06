@@ -4,7 +4,7 @@
 \alias{modelStan}
 \title{Bayesian mixed linear regression modelling}
 \usage{
-modelStan(y_var, x_var, id_var, dat, seed, ...)
+modelStan(y_var, x_var, id_var = "ID", dat, seed = 1, ...)
 }
 \arguments{
 \item{y_var}{Character of response variable}

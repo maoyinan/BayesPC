@@ -15,9 +15,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' df_of_draws <- modelStan("Record", paste0("Z", 1:10), "ID", DATASET)
-#' }
+#' data(df_of_draws)
 #' ls_par <- postMean(df_of_draws, paste0("Z", 1:10), "ID", DATASET)
 #' ls_idxA <- list(
 #'   seq(10),

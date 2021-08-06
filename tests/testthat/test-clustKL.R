@@ -1,4 +1,4 @@
-test_that("random seed works", {
+test_that("Random seed works", {
   ls_par <- postMean(df_of_draws, paste0("Z", 1:10), "ID", DATASET)
   ls_idxA <- list(
     seq(10),

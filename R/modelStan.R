@@ -15,7 +15,7 @@
 #' @export
 #' @examples
 #' df_of_draws <- modelStan("Record", paste0("Z", 1:10), "ID", DATASET, seed=1, iter = 2, chain = 1)
-modelStan <- function(y_var, x_var, id_var, dat, seed, ...) {
+modelStan <- function(y_var, x_var, id_var="ID", dat, seed=1, ...) {
   dat_mcmc <- list(
     N = nrow(dat),
     y = dat[, y_var],

@@ -9,25 +9,26 @@
 #' @param nDraw Number of draws to sample from projection clustering output
 #' @param nClusters Vector of cluster numbers
 #'
-#' @return List of pairwise probability tables corresponding to random effect projection
+#' @return List of 2 items.
+#' ls_prob: pairwise probability tables corresponding to random effect projection
 #' specified in \code{ls_idxA}. Row and column index of table indicate subject
-#' ID number in \code{dat}
+#' ID number in \code{dat}. Only the lower triangular matrix is filled.
+#' arr_cluster: array of optimized cluster labels based on randomly drawn samples
+#' corresponding to chosen random effects.
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' df_of_draws <- modelStan("Record", paste0("Z", 1:10), "ID", DATASET)
-#' }
+#' data(df_of_draws)
 #' ls_idxA <- list(
 #'   seq(10),
 #'   1:4,
 #'   5:7,
 #'   8:10
 #' )
-#' ls_prob <- postPairs(df_of_draws, x_var=paste0("Z", 1:10), id_var="ID", dat=DATASET,
+#' out_pc <- postPairs(df_of_draws, x_var=paste0("Z", 1:10), id_var="ID", dat=DATASET,
 #'                     ls_idxA, nIter=10, nDraw=2, nClusters=4, regQ=1e-6, seed=1)
-
-postPairs <- function(df_of_draws, x_var, id_var, dat, ls_idxA, nIter, nDraw,nClusters, regQ, seed){
+#'
+postPairs <- function(df_of_draws, x_var, id_var="ID", dat, ls_idxA, nIter=10, nDraw=1000, nClusters, regQ=1e-6, seed=1){
   id <- as.numeric(dat[, id_var])
   nSub <- length(unique(id))
   nBasis <- length(x_var)
@@ -53,19 +54,23 @@ postPairs <- function(df_of_draws, x_var, id_var, dat, ls_idxA, nIter, nDraw,nCl
       }
     }
     ls_prob_t <- tb
-    list(ls_prob_t)
+    list(ls_prob_t,
+         post.obj$clusterVec)
   }->temp
 
-  ls_prob <- lapply(temp,'[[',1)
-  ls_prob
+  list(
+    ls_prob=lapply(temp,'[[',1),
+    arr_cluster=array(unlist(lapply(temp,'[[',2)),
+                         dim=c(nSub, length(ls_idxA)))
+  )
 }
 
 # main helper function
 post.cluster <- function(df_of_draws,nDraw, dat, nBasis,idxA, idxB, id, nCluster,nIter, regQ, seed){
 
-  nSub= length(unique(id))
+  nSub <-  length(unique(id))
   idxDraw <- sample(nrow(df_of_draws),nDraw)
-
+  idx <- 0
   foreach(idx = idxDraw) %dopar% {
     bAMatrix <- matrix(unlist(
       df_of_draws[idx,sprintf('beta[%d,%d]',rep(seq(nSub), each=nBasis),seq(nBasis))]),

@@ -7,14 +7,14 @@
 postPairs(
   df_of_draws,
   x_var,
-  id_var,
+  id_var = "ID",
   dat,
   ls_idxA,
-  nIter,
-  nDraw,
+  nIter = 10,
+  nDraw = 1000,
   nClusters,
-  regQ,
-  seed
+  regQ = 1e-06,
+  seed = 1
 )
 }
 \arguments{
@@ -39,9 +39,12 @@ postPairs(
 \item{seed}{Random seed to initialize cluster centers}
 }
 \value{
-List of pairwise probability tables corresponding to random effect projection
+List of 2 items.
+ls_prob: pairwise probability tables corresponding to random effect projection
 specified in \code{ls_idxA}. Row and column index of table indicate subject
-ID number in \code{dat}
+ID number in \code{dat}. Only the lower triangular matrix is filled.
+arr_cluster: array of optimized cluster labels based on randomly drawn samples
+corresponding to chosen random effects.
 }
 \description{
 Given a vector of cluster numbers and projection clustering output, \code{postPairs}
@@ -49,15 +52,14 @@ calculate the posterior probability of any pair of subjects being clustered in t
 same group.
 }
 \examples{
-\dontrun{
-df_of_draws <- modelStan("Record", paste0("Z", 1:10), "ID", DATASET)
-}
+data(df_of_draws)
 ls_idxA <- list(
   seq(10),
   1:4,
   5:7,
   8:10
 )
-ls_prob <- postPairs(df_of_draws, x_var=paste0("Z", 1:10), id_var="ID", dat=DATASET,
+out_pc <- postPairs(df_of_draws, x_var=paste0("Z", 1:10), id_var="ID", dat=DATASET,
                     ls_idxA, nIter=10, nDraw=2, nClusters=4, regQ=1e-6, seed=1)
+
 }

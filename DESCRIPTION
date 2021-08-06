@@ -9,12 +9,12 @@ Authors@R:
            comment = c(ORCID = "0000-0002-1293-4826"))
 Description: Implement functions in support of manuscript 
     "Bayesian clustering using random effects models and predictive projections". 
-    The main goal of the algorithm is to cluster longitudinal data (not necessarily
-    equally sampled) into several clusters based on chosen random 
+    The main goal of the algorithm is to cluster longitudinal data with freely spaced
+    time points into several clusters based on chosen random 
     effects in a Bayesian linear mixed model setting. Cluster number optimisation 
-    is integrated, but manual selection is allowed. A few benchmark methods are 
-    supplied to compare with BayesPC. Example of crop image data is built in to 
-    demonstrate the algorithm.
+    is integrated within, while manual selection is also allowed. 
+    A few traditional clustering methods are included to benchmark with BayesPC. 
+    Example of a simulated dataset is supplied to demonstrate the algorithm usage.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -36,7 +36,12 @@ Imports:
     rstudioapi,
     kableExtra,
     foreach,
-    doParallel
+    doParallel,
+    fossil,
+    BHC,
+    TSclust,
+    kml,
+    mclust
 VignetteBuilder: knitr
 Depends: 
     R (>= 2.10)

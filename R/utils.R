@@ -1,5 +1,7 @@
 # Helper functions to calculate intermediate steps for projection-based clustering
-globalVariables(c("%>%", "ID", "idx", "y"))
+globalVariables(c("%>%",".", "Group", "ID", "Sub1", "index", "prob","<<-","cld1"))
+compiler::setCompilerOptions(suppressAll = TRUE)
+
 
 Q.func <- function(idxA, idxB, dat,Gamma, G, id){
   nSub= length(unique(id))

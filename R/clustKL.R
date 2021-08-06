@@ -20,9 +20,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' df_of_draws <- modelStan("Record", paste0("Z", 1:10), "ID", DATASET)
-#' }
+#' data(df_of_draws)
 #' ls_par <- postMean(df_of_draws, paste0("Z", 1:10), "ID", DATASET)
 #' ls_idxA <- list(
 #'   seq(10),
@@ -43,7 +41,7 @@ clustKL <- function(id_var, ls_par, dat, ls_idxA, nIter, thKL, regQ, seed){
     idxA <- ls_idxA[[t]]
     idxB <- setdiff(ls_idxA[[1]],idxA)
 
-    cat(sprintf('Set %d: optimizing cluster number by KL\n',t))
+    cat(sprintf('\nSet %d: optimizing cluster number by KL',t))
 
     bAMatrix <- bMatrix[,idxA]
     Q <- Q.func(idxA, idxB, dat,Gamma, G,id)

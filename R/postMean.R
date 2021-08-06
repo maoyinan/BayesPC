@@ -9,9 +9,7 @@
 #' @export
 #'
 #' @examples
-#' \dontrun{
-#' df_of_draws <- modelStan("Record", paste0("Z", 1:10), "ID", DATASET)
-#' }
+#' data(df_of_draws)
 #' ls_par <- postMean(df_of_draws, paste0("Z", 1:10), "ID", DATASET)
 postMean <- function(df_of_draws, x_var, id_var, dat) {
   nBasis <- length(x_var)

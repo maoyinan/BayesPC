@@ -4,9 +4,15 @@
 \alias{clustBoot}
 \title{Choose cluster number by bootstrap method}
 \usage{
-clustBoot(mat_fitted, dat, nB, nCl, seed)
+clustBoot(x_var, id_var, t_var, mat_fitted, dat, nB, nCl, seed)
 }
 \arguments{
+\item{x_var}{Character vector of random effect variables}
+
+\item{id_var}{Character of id variable}
+
+\item{t_var}{Column name in \code{dat} representing the scaled time points ranging in \eqn{[0,1]}}
+
 \item{mat_fitted}{Prediction replicates of Linear Mixed Model output. Multiple columns
 corresponds to sets of random effects of projection defined in \code{pcFit}}
 
@@ -34,10 +40,16 @@ Empirical clustering distance is hence computed to enable choosing minimal clust
 with cutoff being half of the largest clustering distance.
 }
 \examples{
-\dontrun{
-df_of_draws <- modelStan("Record", paste0("Z", 1:10), "ID", DATASET)
-}
+data(df_of_draws)
 ls_par <- postMean(df_of_draws, paste0("Z", 1:10), "ID", DATASET)
+ls_idxA <- list(
+  seq(10),
+  1:4,
+  5:7,
+  8:10
+)
+mat_fitted <- pcFit("ID", ls_par, DATASET, ls_idxA)
+out_boot <- clustBoot(paste0("Z", 1:10), "ID","t", mat_fitted,DATASET, 10, 5, 1)
 }
 \seealso{
 Other Cluster number choices: 
